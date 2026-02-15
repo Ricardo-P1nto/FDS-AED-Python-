@@ -1,0 +1,9 @@
+{
+  "professores": [
+    { "nome": "Prof. noronha", "senha": "admin" }
+  ],
+  "alunos": [
+    { "nome": "Rodrigo Rodrigues", "idade": 20, "numero": 1001, "password": "123" },
+    { "nome": "Diogo Elfo", "idade": 22, "numero": 1002, "password": "456" }
+  ]
+}
