@@ -2,7 +2,6 @@ import json
 from classProfessor import Professor
 from classAluno import Aluno
 
-
 def carregar_dados():
     try:
         with open('database.json', 'r', encoding='utf-8') as f:
@@ -14,14 +13,15 @@ def carregar_dados():
                 for a in dados['alunos']
             ]
             
-            # Converter dicionários JSON em objetos Professor
+            # Converter dicionários JSON em objetos Professor (Agora com ID)
             lista_profs = [
-                Professor(p['nome'], p['senha']) 
+                Professor(p['nome'], p['senha'], p.get('id', 0)) # Usa 0 se não tiver ID
                 for p in dados['professores']
             ]
             
             return lista_alunos, lista_profs
     except FileNotFoundError:
+        print("Erro: Ficheiro database.json não encontrado.")
         return [], []
 
 def guardar_dados(alunos, professores):

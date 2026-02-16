@@ -1,37 +1,32 @@
-from leitorDados import carregar_dados
-
 class Aluno:
-    alunos_db, profs_db = carregar_dados()
-
     def __init__(self, nome, idade, numero, password):
         self.nome = nome
         self.idade = idade
         self.numero = numero
         self.password = password
 
-    def marcar_presenca():
-        pass
-
-    def menu_aluno(self, lista_presencas):
-        print("\n--- REGISTO DE PRESENÇA ---")
-        try:
-            id_aluno = int(input("Número de Aluno: "))
-            nome = input("Nome do Aluno: ")
-            lista_presencas.append((id_aluno, nome))
-            print("Presença registada!")
-        except ValueError:
-            print("Erro: O ID deve ser um número inteiro.")
-
-    def login_aluno(self):
-        num = int(input("Número de aluno: "))
-        pw = input("Password: ")
+    def menu_aluno(self, estado_aula):
+        print(f"\n--- PAINEL ALUNO: {self.nome} ---")
+        print("1. Marcar Presença")
+        print("0. Sair")
         
-        # Procura o aluno na "base de dados" carregada
-        aluno_encontrado = next((a for a in Aluno.alunos_db if a.numero == num and a.password == pw), None)
+        opcao = input("Escolha: ")
         
-        if aluno_encontrado:
-            print(f"Bem-vindo, {aluno_encontrado.nome}!")
-            # aluno_encontrado.marcar_presenca() -> Lógica de adicionar à lista da aula
-        else:
-            print("Credenciais inválidas.")
-    
+        if opcao == "1":
+            if estado_aula['aberta']:
+                # Verifica se já não marcou
+                ja_marcou = False
+                for p in estado_aula['presencas']:
+                    if p[0] == self.numero:
+                        ja_marcou = True
+                        break
+                
+                if not ja_marcou:
+                    estado_aula['presencas'].append((self.numero, self.nome))
+                    print(f"✅ Presença registada com sucesso para {self.nome}!")
+                else:
+                    print("⚠️ Já tens a presença marcada nesta aula.")
+            else:
+                print("❌ Não existe nenhuma aula a decorrer no momento.")
+        elif opcao == "0":
+            return
