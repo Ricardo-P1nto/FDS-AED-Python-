@@ -1,7 +1,7 @@
 import time
 import csv
 import testeStress
-from fpdf import FPDF # Certifica-te que instalaste: pip install fpdf
+from fpdf import FPDF 
 
 class Professor:
     def __init__(self, nome, senha, id_prof):
@@ -63,7 +63,7 @@ class Professor:
                 else:
                     estado_aula['aberta'] = True
                     estado_aula['inicio'] = time.time()
-                    estado_aula['presencas'] = [] # Limpa presenças anteriores
+                    estado_aula['presencas'] = [] 
                     print("🔔 AULA ABERTA! Os alunos já podem marcar presença.")
 
             elif opcao == "2":
@@ -74,6 +74,17 @@ class Professor:
                     duracao = fim - estado_aula['inicio']
                     estado_aula['aberta'] = False
                     
+                    # --- NOVO: ORDENAÇÃO (ADICIONADO AQUI) ---
+                    print("A ordenar lista de presenças...")
+                    try:
+                        # Importamos aqui para garantir que usas o Bubble Sort
+                        from algoritmos import bubble_sort
+                        # Ordena a lista e guarda-a de volta no estado_aula
+                        estado_aula['presencas'] = bubble_sort(estado_aula['presencas'])
+                    except ImportError:
+                        print("Erro: Ficheiro 'algoritmos.py' não encontrado ou função 'bubble_sort' inexistente.")
+                    # -----------------------------------------
+
                     print(f"\n🛑 Aula Fechada! Duração: {duracao:.2f} segundos.")
                     print(f"Total de presenças: {len(estado_aula['presencas'])}")
                     
