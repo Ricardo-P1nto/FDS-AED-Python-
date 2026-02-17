@@ -1,9 +1,23 @@
 {
-  "professores": [
-    { "nome": "Prof. Noronha", "senha": "admin", "id": 10 }
-  ],
-  "alunos": [
-    { "nome": "Rodrigo Rodrigues", "idade": 20, "numero": 1001, "password": "123" },
-    { "nome": "Diogo Elfo", "idade": 22, "numero": 1002, "password": "456" }
-  ]
+    "alunos": [
+        {
+            "nome": "Rodrigo Rodrigues",
+            "idade": 20,
+            "numero": 1001,
+            "password": "123"
+        },
+        {
+            "nome": "Diogo Elfo",
+            "idade": 22,
+            "numero": 1002,
+            "password": "456"
+        }
+    ],
+    "professores": [
+        {
+            "nome": "Prof. Noronha",
+            "senha": "admin",
+            "id": 10
+        }
+    ]
 }

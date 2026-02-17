@@ -2,32 +2,79 @@ import json
 from classProfessor import Professor
 from classAluno import Aluno
 
+FICHEIRO_DB = 'database.json'
+
 def carregar_dados():
+    """Lê o ficheiro JSON e converte os dados em objetos Python."""
     try:
-        with open('database.json', 'r', encoding='utf-8') as f:
+        with open(FICHEIRO_DB, 'r', encoding='utf-8') as f:
             dados = json.load(f)
-            
-            # Converter dicionários JSON em objetos Aluno
-            lista_alunos = [
-                Aluno(a['nome'], a['idade'], a['numero'], a['password']) 
-                for a in dados['alunos']
-            ]
-            
-            # Converter dicionários JSON em objetos Professor (Agora com ID)
-            lista_profs = [
-                Professor(p['nome'], p['senha'], p.get('id', 0)) # Usa 0 se não tiver ID
-                for p in dados['professores']
-            ]
-            
+
+            # Converter dicionários JSON em objetos Aluno com validação de tipos
+            lista_alunos = []
+            for a in dados.get('alunos', []):
+                try:
+                    aluno = Aluno(
+                        str(a['nome']),
+                        int(a['idade']),
+                        int(a['numero']),
+                        str(a['password'])  # Garante que password é sempre string
+                    )
+                    lista_alunos.append(aluno)
+                except (ValueError, KeyError) as e:
+                    print(f"⚠️  Aluno ignorado por dados inválidos: {e}")
+
+            # Converter dicionários JSON em objetos Professor
+            lista_profs = []
+            for p in dados.get('professores', []):
+                try:
+                    prof = Professor(
+                        str(p['nome']),
+                        str(p['senha']),
+                        int(p.get('id', 0))
+                    )
+                    lista_profs.append(prof)
+                except (ValueError, KeyError) as e:
+                    print(f"⚠️  Professor ignorado por dados inválidos: {e}")
+
             return lista_alunos, lista_profs
+
     except FileNotFoundError:
-        print("Erro: Ficheiro database.json não encontrado.")
+        print(f"❌ Erro: Ficheiro '{FICHEIRO_DB}' não encontrado.")
+        return [], []
+    except json.JSONDecodeError:
+        print(f"❌ Erro: O ficheiro '{FICHEIRO_DB}' está corrompido ou tem formato inválido.")
         return [], []
 
+
 def guardar_dados(alunos, professores):
+    """
+    Serializa os objetos Python de volta para o ficheiro JSON.
+    CORREÇÃO: esta função é agora chamada no main ao sair do programa,
+    para que as alterações feitas em runtime sejam persistidas.
+    """
     dados = {
-        "alunos": [vars(a) for a in alunos], # vars() transforma o objeto em dicionário
-        "professores": [vars(p) for p in professores]
+        # vars() converte cada objeto nos seus atributos como dicionário
+        "alunos": [
+            {
+                "nome": a.nome,
+                "idade": a.idade,
+                "numero": a.numero,
+                "password": a.password
+            }
+            for a in alunos
+        ],
+        "professores": [
+            {
+                "nome": p.nome,
+                "senha": p.senha,
+                "id": p.id
+            }
+            for p in professores
+        ]
     }
-    with open('database.json', 'w', encoding='utf-8') as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
+    try:
+        with open(FICHEIRO_DB, 'w', encoding='utf-8') as f:
+            json.dump(dados, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"❌ Erro ao guardar dados: {e}")
