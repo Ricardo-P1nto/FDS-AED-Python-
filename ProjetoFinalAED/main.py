@@ -1,20 +1,15 @@
 import leitorDados
 
 # --- ESTADO GLOBAL DA AULA ---
-# Dicionário partilhado entre Professor e Aluno para manter o estado da aula
 estado_aula = {
     'aberta': False,
     'inicio': 0.0,
     'presencas': []  # Lista de tuplos (numero, nome)
 }
 
-
+# --- FUNÇÃO DE AUTENTICAÇÃO ---
 def autenticar_usuario(tipo, db_alunos, db_profs):
-    """
-    Função genérica de login.
-    Recebe o tipo ('Aluno' ou 'Professor') e as listas da base de dados.
-    Devolve o objeto autenticado ou None se as credenciais forem inválidas.
-    """
+    
     try:
         id_input = int(input(f"Digite o ID/Número de {tipo}: "))
         senha_input = input("Digite a Senha: ")
@@ -24,7 +19,6 @@ def autenticar_usuario(tipo, db_alunos, db_profs):
 
     if tipo == "Aluno":
         for aluno in db_alunos:
-            # Compara numero (int) e password (ambos string após sanitização)
             if aluno.numero == id_input and aluno.password == senha_input:
                 return aluno
 
@@ -39,7 +33,6 @@ def autenticar_usuario(tipo, db_alunos, db_profs):
 
 # --- LOOP PRINCIPAL ---
 def main():
-    # Carregar dados uma única vez ao iniciar o programa
     lista_alunos, lista_profs = leitorDados.carregar_dados()
 
     if not lista_alunos and not lista_profs:
@@ -66,7 +59,6 @@ def main():
                 prof_logado.menu_professor(estado_aula)
 
         elif opcao == "0":
-            # CORREÇÃO: guardar dados ao sair para persistir qualquer alteração feita
             leitorDados.guardar_dados(lista_alunos, lista_profs)
             print("💾 Dados guardados. A sair do sistema...")
             break

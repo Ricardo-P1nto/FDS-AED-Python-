@@ -5,12 +5,12 @@ from classAluno import Aluno
 FICHEIRO_DB = 'database.json'
 
 def carregar_dados():
-    """Lê o ficheiro JSON e converte os dados em objetos Python."""
+    """Lê o ficheiro JSON e converte os dados em objetos."""
     try:
         with open(FICHEIRO_DB, 'r', encoding='utf-8') as f:
             dados = json.load(f)
 
-            # Converter dicionários JSON em objetos Aluno com validação de tipos
+            # Converter dicionários JSON em objetos Aluno
             lista_alunos = []
             for a in dados.get('alunos', []):
                 try:
@@ -18,7 +18,7 @@ def carregar_dados():
                         str(a['nome']),
                         int(a['idade']),
                         int(a['numero']),
-                        str(a['password'])  # Garante que password é sempre string
+                        str(a['password'])
                     )
                     lista_alunos.append(aluno)
                 except (ValueError, KeyError) as e:
@@ -48,13 +48,7 @@ def carregar_dados():
 
 
 def guardar_dados(alunos, professores):
-    """
-    Serializa os objetos Python de volta para o ficheiro JSON.
-    CORREÇÃO: esta função é agora chamada no main ao sair do programa,
-    para que as alterações feitas em runtime sejam persistidas.
-    """
     dados = {
-        # vars() converte cada objeto nos seus atributos como dicionário
         "alunos": [
             {
                 "nome": a.nome,

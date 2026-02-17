@@ -1,9 +1,8 @@
 import time
 import csv
 import testeStress
-from algoritmos import bubble_sort  # CORREÇÃO: import no topo, não dentro do elif
+from algoritmos import bubble_sort
 
-# CORREÇÃO: import do fpdf com tratamento de erro
 # Se a biblioteca não estiver instalada, o programa não crasha ao iniciar
 try:
     from fpdf import FPDF
@@ -35,8 +34,7 @@ class Professor:
             print(f"❌ Erro ao exportar CSV: {e}")
 
     def exportar_pdf(self, presencas, tempo_duracao):
-        """Exporta a lista de presenças para um ficheiro PDF formatado."""
-        # CORREÇÃO: verifica se a biblioteca está disponível antes de tentar usar
+        """Exporta a lista de presenças para um ficheiro PDF."""
         if not FPDF_DISPONIVEL:
             print("❌ Exportação PDF não disponível. Instala a biblioteca fpdf2.")
             return
@@ -79,7 +77,7 @@ class Professor:
             print(f"Estado da Aula: {status}")
             print("1. Abrir Aula (Iniciar Cronómetro)")
             print("2. Fechar Aula e Exportar Relatório")
-            print("3. Gerar Carga de Stress (Teste de Algoritmos)")
+            print("3. Gerar Carga de Stress (Teste de Algoritmos com limite de 99000 registos)")
             print("0. Logout")
 
             opcao = input("Escolha: ").strip()
@@ -120,7 +118,6 @@ class Professor:
                         self.exportar_pdf(estado_aula['presencas'], duracao)
 
             elif opcao == "3":
-                # CORREÇÃO: validação do input para evitar crash com valor não numérico
                 try:
                     qtd = int(input("Quantos registos quer gerar? "))
                     if qtd <= 0:

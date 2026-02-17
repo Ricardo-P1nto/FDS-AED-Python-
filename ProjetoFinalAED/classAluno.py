@@ -14,8 +14,6 @@ class Aluno:
         self.password = str(password)  # Garante que a password é sempre string
 
     def menu_aluno(self, estado_aula):
-        # CORREÇÃO: adicionado loop while para o aluno poder fazer várias ações
-        # sem precisar de voltar a fazer login
         while True:
             print(f"\n--- PAINEL ALUNO: {self.nome} ---")
             print("1. Marcar Presença")
